@@ -1,0 +1,41 @@
+{
+  "name" : "etl_job",
+  "jobMode" : "VISUAL",
+  "description" : "",
+  "role" : "arn:aws:iam::744932537742:role/priyankadataip",
+  "executionProperty" : {
+    "maxConcurrentRuns" : 1
+  },
+  "command" : {
+    "name" : "glueetl",
+    "scriptLocation" : "s3://aws-glue-assets-744932537742-us-east-1/scripts/etl_job.py",
+    "pythonVersion" : "3"
+  },
+  "defaultArguments" : {
+    "--enable-metrics" : "true",
+    "--enable-spark-ui" : "true",
+    "--spark-event-logs-path" : "s3://aws-glue-assets-744932537742-us-east-1/sparkHistoryLogs/",
+    "--enable-job-insights" : "true",
+    "--enable-observability-metrics" : "true",
+    "--enable-glue-datacatalog" : "true",
+    "--enable-continuous-cloudwatch-log" : "true",
+    "--job-bookmark-option" : "job-bookmark-disable",
+    "--job-language" : "python",
+    "--TempDir" : "s3://aws-glue-assets-744932537742-us-east-1/temporary/"
+  },
+  "maxRetries" : 0,
+  "allocatedCapacity" : 10,
+  "timeout" : 480,
+  "maxCapacity" : 10.0,
+  "glueVersion" : "5.0",
+  "numberOfWorkers" : 10,
+  "workerType" : "G.1X",
+  "executionClass" : "STANDARD",
+  "codeGenConfigurationNodes" : "{\"node-1752689308308\":{\"S3ParquetSource\":{\"AdditionalOptions\":{\"EnableSamplePath\":false,\"SamplePath\":\"s3://stagingbucketp/financial_data_staging/part-00000-170b9c68-df59-420a-a943-69b4b915437e-c000.snappy.parquet\"},\"Exclusions\":[],\"Name\":\"Amazon S3\",\"OutputSchemas\":[{\"Columns\":[{\"Name\":\"company\",\"Type\":\"string\"},{\"Name\":\"revenue\",\"Type\":\"double\"},{\"Name\":\"expenses\",\"Type\":\"double\"},{\"Name\":\"profit\",\"Type\":\"int\"},{\"Name\":\"region\",\"Type\":\"string\"},{\"Name\":\"currency\",\"Type\":\"string\"},{\"Name\":\"notes\",\"Type\":\"string\"},{\"Name\":\"profit margin\",\"Type\":\"double\"},{\"Name\":\"approval status\",\"Type\":\"string\"}]}],\"Paths\":[\"s3://stagingbucketp/financial_data_staging/part-00000-170b9c68-df59-420a-a943-69b4b915437e-c000.snappy.parquet\"],\"Recurse\":true}},\"node-1752689469383\":{\"SparkSQL\":{\"Inputs\":[\"node-1752689308308\"],\"Name\":\"SQL Query\",\"OutputSchemas\":[{\"Columns\":[{\"Name\":\"max(profit)\",\"Type\":\"int\"}]}],\"SqlAliases\":[{\"Alias\":\"myDataSource\",\"From\":\"node-1752689308308\"}],\"SqlQuery\":\"select max(profit) from myDataSource\"}},\"node-1752689567930\":{\"MySQLCatalogTarget\":{\"Database\":\"finanicaldata\",\"Inputs\":[\"node-1752689469383\"],\"Name\":\"MySQL\",\"Table\":\"financial_data_staging\"}}}",
+  "sourceControlDetails" : {
+    "provider" : "GITHUB",
+    "repository" : "pp",
+    "branch" : "main",
+    "folder" : "etl_job"
+  }
+}
